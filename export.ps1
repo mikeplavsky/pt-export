@@ -26,9 +26,6 @@ function GetStory {
 $url = "https://www.pivotaltracker.com/services/v3/projects/$ProjectId/stories?type:feature,release"
 $res = Invoke-WebRequest $url  -Proxy $proxy -ProxyUseDefaultCredentials -Headers @{"X-TrackerToken" = $PtKey }
 
-$res.Content | Out-File "result.xml"
-
-$project = [xml]$res.Content
-$project.stories.ChildNodes | GetStory | Export-CSV -Path "result.csv" 
+([xml]$res.Content).stories.ChildNodes | GetStory | Export-CSV -Path "result.csv" 
 
 
