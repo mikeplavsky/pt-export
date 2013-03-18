@@ -1,0 +1,34 @@
+Param(
+
+  [Parameter(Mandatory=$True, Position=1)]
+  [string]$ProjectId,
+
+  [Parameter(Mandatory=$True)]
+  [string]$PtKey,
+
+  [Parameter(Mandatory=$True)]
+  [string]$Proxy
+
+)
+
+function GetStory {
+ process {
+    new-object -TypeName PsObject -Property @{ 
+
+      Name = $_.Name
+      Type = $_.story_type      
+      Estimate = $_.Estimate.InnerText   
+      Created = $_.created_at.InnerText
+    }
+ }
+}
+
+$url = "https://www.pivotaltracker.com/services/v3/projects/$ProjectId/stories?type:feature,release"
+$res = Invoke-WebRequest $url  -Proxy $proxy -ProxyUseDefaultCredentials -Headers @{"X-TrackerToken" = $PtKey }
+
+$res.Content | Out-File "result.xml"
+
+$project = [xml]$res.Content
+$project.stories.ChildNodes | GetStory | Export-CSV -Path "result.csv" 
+
+
