@@ -34,7 +34,6 @@ if ($Proxy) {
 }
 
 $res = Invoke-WebRequest @params
-
 ([xml]$res.Content).stories.ChildNodes | GetStory | Export-CSV -Path "result.csv" -notype
 
 
