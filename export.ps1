@@ -24,10 +24,16 @@ function GetStory {
 }
 
 $url = "https://www.pivotaltracker.com/services/v3/projects/$ProjectId/stories?type:feature,release"
+$params = @{Uri=$url; Header=@{"X-TrackerToken" = $PtKey }}
 
-if($Proxy) { $res = Invoke-WebRequest $url -Proxy $proxy -ProxyUseDefaultCredentials -Headers @{"X-TrackerToken" = $PtKey } }
-else { $res = Invoke-WebRequest $url -Headers @{"X-TrackerToken" = $PtKey } }
+if ($Proxy) {
 
+    $params.Add( "Proxy", $Proxy)
+    $params.Add( "ProxyUseDefaultCredentials", $true)
+
+}
+
+$res = Invoke-WebRequest @params
 
 ([xml]$res.Content).stories.ChildNodes | GetStory | Export-CSV -Path "result.csv" -notype
 
