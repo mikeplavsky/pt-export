@@ -29,6 +29,6 @@ if($Proxy) { $res = Invoke-WebRequest $url -Proxy $proxy -ProxyUseDefaultCredent
 else { $res = Invoke-WebRequest $url -Headers @{"X-TrackerToken" = $PtKey } }
 
 
-([xml]$res.Content).stories.ChildNodes | GetStory | Export-CSV -Path "result.csv" 
+([xml]$res.Content).stories.ChildNodes | GetStory | Export-CSV -Path "result.csv" -notype
 
 
