@@ -13,8 +13,7 @@ Param(
 
 function GetStory {
  process {
-    new-object -TypeName PsObject -Property @{ 
-
+    new-object PsObject -Property @{ 
       Name = $_.Name
       Type = $_.story_type      
       Estimate = $_.Estimate.InnerText   
